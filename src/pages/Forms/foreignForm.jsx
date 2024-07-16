@@ -61,17 +61,20 @@ const ForeignForm = () => {
     };
 
     try {
-      const response = await fetch("/api/create-razorpay-order", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          amount: parseInt(userDetails.amount * 100),
-          currency: "INR",
-          receipt: "order_rcptid_" + user.name,
-        }),
-      });
+      const response = await fetch(
+        "http://localhost:3001/api/create-razorpay-order",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            amount: parseInt(userDetails.amount * 100),
+            currency: "INR",
+            receipt: "order_rcptid_" + user.name,
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to create order");
@@ -96,18 +99,21 @@ const ForeignForm = () => {
             ) {
               throw new Error("Missing required Razorpay parameters");
             }
-            const verifyResponse = await fetch("/api/verify-payment", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_signature: response.razorpay_signature,
-                email: userDetails.email,
-              }),
-            });
+            const verifyResponse = await fetch(
+              "http://localhost:3001/api/verify-payment",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_signature: response.razorpay_signature,
+                  email: userDetails.email,
+                }),
+              }
+            );
             if (!verifyResponse.ok) {
               throw new Error("Payment verification failed");
             }
