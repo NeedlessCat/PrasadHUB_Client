@@ -43,13 +43,13 @@ const Navbar = () => {
 
       {/* Signup */}
       <li>
-        <Link to={"/about"}>About Us</Link>
+        <Link to={"/about"}>About</Link>
       </li>
 
       {/* Admin */}
       {!user ? (
         <li>
-          <Link to={"/login"}>Admin Login</Link>
+          <Link to={"/login"}>Admin</Link>
         </li>
       ) : (
         <li className=" cursor-pointer" onClick={logout}>

@@ -1,21 +1,55 @@
-import { useContext } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import myContext from "../../context/myContext";
+import { DownloadTableExcel } from "react-export-table-to-excel";
 
 const OrderForeign = () => {
+  const tableRef1 = useRef(null);
   const context = useContext(myContext);
   const { getForeignOrder } = context;
+
+  const [isTableReady, setIsTableReady] = useState(false);
   // console.log(getAllOrder);
+
+  useEffect(() => {
+    if (tableRef1.current && getForeignOrder.length > 0) {
+      setIsTableReady(true);
+    }
+  }, [getForeignOrder]);
+
+  const handleExportError = (error) => {
+    console.error("Export failed:", error);
+    // You can add user-friendly error handling here, such as displaying a message to the user
+  };
   return (
     <div>
       <div>
-        <div className="py-5">
+        <div className="py-5 flex justify-between">
           {/* text  */}
           <h1 className=" text-xl text-pink-300 font-bold">Foreign Orders</h1>
+          {isTableReady ? (
+            <DownloadTableExcel
+              filename="takeaway_orders"
+              sheet="orders"
+              currentTableRef={tableRef1.current}
+              onError={handleExportError}
+            >
+              <button className="bg-pink-200 hover:bg-pink-400 text-white font-bold py-2 px-4 rounded">
+                Export Excel
+              </button>
+            </DownloadTableExcel>
+          ) : (
+            <button className="bg-gray-300 text-gray-500 font-bold py-2 px-4 rounded cursor-not-allowed">
+              Loading...
+            </button>
+          )}
         </div>
 
         {/* table  */}
         <div className="w-full overflow-x-auto">
-          <table className="w-full text-left border border-collapse sm:border-separate border-pink-100 text-pink-400">
+          <table
+            ref={tableRef1}
+            className="w-full text-left border border-collapse sm:border-separate border-pink-100 text-pink-400"
+          >
             <tbody>
               <tr>
                 <th

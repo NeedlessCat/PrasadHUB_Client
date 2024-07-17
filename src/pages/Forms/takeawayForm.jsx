@@ -24,6 +24,13 @@ const TakeawayForm = () => {
     email: "",
     mobile: "",
     amount: "",
+    father: "",
+    address: "",
+    district: "",
+    state: "",
+    country: "",
+    pin: "",
+    adhaar: "",
     role: "takeaway",
   });
 
@@ -37,7 +44,14 @@ const TakeawayForm = () => {
       userDetails.name.trim() === "" ||
       userDetails.email.trim() === "" ||
       userDetails.mobile.trim() === "" ||
-      userDetails.amount.trim() === ""
+      userDetails.amount.trim() === "" ||
+      userDetails.father.trim() === "" ||
+      userDetails.address.trim() === "" ||
+      userDetails.district.trim() === "" ||
+      userDetails.state.trim() === "" ||
+      userDetails.country.trim() === "" ||
+      userDetails.pin.trim() === "" ||
+      userDetails.adhaar.trim() === ""
     ) {
       toast.error("All Fields are required");
       return;
@@ -52,6 +66,13 @@ const TakeawayForm = () => {
       role: userDetails.role,
       amount: userDetails.amount,
       mobile: userDetails.mobile,
+      father: userDetails.father,
+      address: userDetails.address,
+      district: userDetails.district,
+      state: userDetails.state,
+      country: userDetails.country,
+      pin: userDetails.pin,
+      adhaar: userDetails.adhaar,
       time: Timestamp.now(),
       date: new Date().toLocaleString("en-US", {
         month: "short",
@@ -61,17 +82,21 @@ const TakeawayForm = () => {
     };
 
     try {
-      const response = await fetch("/api/create-razorpay-order", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          amount: parseInt(userDetails.amount * 100),
-          currency: "INR",
-          receipt: "order_rcptid_" + user.name,
-        }),
-      });
+      const response = await fetch(
+        // "http://localhost:3001/create-razorpay-order",
+        "https://prasadhub-server.onrender.com/create-razorpay-order",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            amount: parseInt(userDetails.amount * 100),
+            currency: "INR",
+            receipt: "order_rcptid_" + user.name,
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to create order");
@@ -98,18 +123,22 @@ const TakeawayForm = () => {
             // ) {
             //   throw new Error("Missing required Razorpay parameters");
             // }
-            const verifyResponse = await fetch("/api/verify-payment", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_signature: response.razorpay_signature,
-                email: userDetails.email,
-              }),
-            });
+            const verifyResponse = await fetch(
+              // "http://localhost:3001/verify-payment",
+              "https://prasadhub-server.onrender.com/verify-payment",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_signature: response.razorpay_signature,
+                  email: userDetails.email,
+                }),
+              }
+            );
             if (!verifyResponse.ok) {
               throw new Error("Payment verification failed");
             }
@@ -135,7 +164,7 @@ const TakeawayForm = () => {
                 },
               };
 
-              const userRefrence = collection(fireDB, "foreignForms");
+              const userRefrence = collection(fireDB, "takeawayForm");
               await addDoc(userRefrence, orderInfo);
 
               setUserDetails({
@@ -180,7 +209,7 @@ const TakeawayForm = () => {
       >
         <div className="absolute inset-0 bg-black bg-opacity-70"></div>
       </div>
-      <div className="relative z-10 min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 min-h-screen flex items-center justify-center py-12 px-4 pt-32 sm:px-6 lg:px-8">
         <div className="max-w-7xl w-full space-y-8 bg-gray-900 p-8 rounded-xl shadow-2xl">
           <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl text-center">
             Donation Form
@@ -197,33 +226,223 @@ const TakeawayForm = () => {
               <div className="bg-gray-800 px-4 py-6 sm:p-8 border border-gray-700 rounded-xl shadow-md">
                 {/* Input fields */}
                 <div className="space-y-4">
-                  <input
-                    type="text"
-                    placeholder="Full Name"
-                    value={userDetails.name}
-                    onChange={(e) =>
-                      setUserDetails({ ...userDetails, name: e.target.value })
-                    }
-                    className="bg-gray-700 border border-gray-600 px-4 py-3 w-full rounded-md outline-none placeholder-gray-400 text-white focus:ring-2 focus:ring-gray-500"
-                  />
-                  <input
-                    type="email"
-                    placeholder="Email Address"
-                    value={userDetails.email}
-                    onChange={(e) =>
-                      setUserDetails({ ...userDetails, email: e.target.value })
-                    }
-                    className="bg-gray-700 border border-gray-600 px-4 py-3 w-full rounded-md outline-none placeholder-gray-400 text-white focus:ring-2 focus:ring-gray-500"
-                  />
-                  <input
-                    type="number"
-                    placeholder="Mobile"
-                    value={userDetails.mobile}
-                    onChange={(e) =>
-                      setUserDetails({ ...userDetails, mobile: e.target.value })
-                    }
-                    className="bg-gray-700 border border-gray-600 px-4 py-3 w-full rounded-md outline-none placeholder-gray-400 text-white focus:ring-2 focus:ring-gray-500"
-                  />
+                  <div className="relative text-gray-400 border-b-2 rounded">
+                    <p className="pl-1">Personal Details</p>
+                  </div>
+                  <div className="relative">
+                    <input
+                      id="fullName"
+                      type="text"
+                      value={userDetails.name}
+                      onChange={(e) =>
+                        setUserDetails({ ...userDetails, name: e.target.value })
+                      }
+                      className="bg-gray-700 border border-gray-600 px-4 py-3 w-full rounded-md outline-none text-white focus:ring-2 focus:ring-gray-500 peer"
+                      placeholder=" "
+                    />
+                    <label
+                      htmlFor="fullName"
+                      className="absolute rounded-md text-sm text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] peer-focus:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-gray-300 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+                    >
+                      Full Name
+                    </label>
+                  </div>
+                  <div className="relative">
+                    <input
+                      id="father"
+                      type="text"
+                      value={userDetails.father}
+                      onChange={(e) =>
+                        setUserDetails({
+                          ...userDetails,
+                          father: e.target.value,
+                        })
+                      }
+                      className="bg-gray-700 border border-gray-600 px-4 py-3 w-full rounded-md outline-none text-white focus:ring-2 focus:ring-gray-500 peer"
+                      placeholder=" "
+                    />
+                    <label
+                      htmlFor="father"
+                      className="absolute rounded-md text-sm text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] peer-focus:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-gray-300 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+                    >
+                      S/o/W/o/D/o Name
+                    </label>
+                  </div>
+                  <div className="relative text-gray-400 border-b-2 rounded">
+                    Contact Details
+                  </div>
+                  <div className="relative">
+                    <input
+                      id="emailAddress"
+                      type="email"
+                      value={userDetails.email}
+                      onChange={(e) =>
+                        setUserDetails({
+                          ...userDetails,
+                          email: e.target.value,
+                        })
+                      }
+                      className="bg-gray-700 border border-gray-600 px-4 py-3 w-full rounded-md outline-none text-white focus:ring-2 focus:ring-gray-500 peer"
+                      placeholder=" "
+                    />
+                    <label
+                      htmlFor="emailAddress"
+                      className="absolute rounded-md text-sm text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] peer-focus:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-gray-300 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+                    >
+                      Email Address
+                    </label>
+                  </div>
+                  <div className="relative">
+                    <input
+                      id="mobile"
+                      type="number"
+                      value={userDetails.mobile}
+                      onChange={(e) =>
+                        setUserDetails({
+                          ...userDetails,
+                          mobile: e.target.value,
+                        })
+                      }
+                      className="bg-gray-700 border border-gray-600 px-4 py-3 w-full rounded-md outline-none text-white focus:ring-2 focus:ring-gray-500 peer"
+                      placeholder=" "
+                    />
+                    <label
+                      htmlFor="mobile"
+                      className="absolute rounded-md text-sm text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] peer-focus:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-gray-300 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+                    >
+                      Mobile
+                    </label>
+                  </div>
+                  <div className="relative">
+                    <input
+                      id="adhaar"
+                      type="number"
+                      value={userDetails.adhaar}
+                      onChange={(e) =>
+                        setUserDetails({
+                          ...userDetails,
+                          adhaar: e.target.value,
+                        })
+                      }
+                      className="bg-gray-700 border border-gray-600 px-4 py-3 w-full rounded-md outline-none text-white focus:ring-2 focus:ring-gray-500 peer"
+                      placeholder=" "
+                    />
+                    <label
+                      htmlFor="adhaar"
+                      className="absolute rounded-md text-sm text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] peer-focus:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-gray-300 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+                    >
+                      Aadhar/PAN no.
+                    </label>
+                  </div>
+                  <div className="relative text-gray-400 border-b-2 rounded">
+                    Correspondance Address
+                  </div>
+                  <div className="relative">
+                    <input
+                      id="address"
+                      type="text"
+                      value={userDetails.address}
+                      onChange={(e) =>
+                        setUserDetails({
+                          ...userDetails,
+                          address: e.target.value,
+                        })
+                      }
+                      className="bg-gray-700 border border-gray-600 px-4 py-3 w-full rounded-md outline-none text-white focus:ring-2 focus:ring-gray-500 peer"
+                      placeholder=" "
+                    />
+                    <label
+                      htmlFor="address"
+                      className="absolute rounded-md text-sm text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] peer-focus:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-gray-300 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+                    >
+                      Address
+                    </label>
+                  </div>
+
+                  <div className="relative">
+                    <input
+                      id="district"
+                      type="text"
+                      value={userDetails.district}
+                      onChange={(e) =>
+                        setUserDetails({
+                          ...userDetails,
+                          district: e.target.value,
+                        })
+                      }
+                      className="bg-gray-700 border border-gray-600 px-4 py-3 w-full rounded-md outline-none text-white focus:ring-2 focus:ring-gray-500 peer"
+                      placeholder=" "
+                    />
+                    <label
+                      htmlFor="district"
+                      className="absolute rounded-md text-sm text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] peer-focus:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-gray-300 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+                    >
+                      District
+                    </label>
+                  </div>
+                  <div className="relative">
+                    <input
+                      id="state"
+                      type="text"
+                      value={userDetails.state}
+                      onChange={(e) =>
+                        setUserDetails({
+                          ...userDetails,
+                          state: e.target.value,
+                        })
+                      }
+                      className="bg-gray-700 border border-gray-600 px-4 py-3 w-full rounded-md outline-none text-white focus:ring-2 focus:ring-gray-500 peer"
+                      placeholder=" "
+                    />
+                    <label
+                      htmlFor="state"
+                      className="absolute rounded-md text-sm text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] peer-focus:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-gray-300 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+                    >
+                      State
+                    </label>
+                  </div>
+                  <div className="relative">
+                    <input
+                      id="country"
+                      type="text"
+                      value={userDetails.country}
+                      onChange={(e) =>
+                        setUserDetails({
+                          ...userDetails,
+                          country: e.target.value,
+                        })
+                      }
+                      className="bg-gray-700 border border-gray-600 px-4 py-3 w-full rounded-md outline-none text-white focus:ring-2 focus:ring-gray-500 peer"
+                      placeholder=" "
+                    />
+                    <label
+                      htmlFor="country"
+                      className="absolute rounded-md text-sm text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] peer-focus:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-gray-300 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+                    >
+                      Country
+                    </label>
+                  </div>
+                  <div className="relative">
+                    <input
+                      id="pin"
+                      type="number"
+                      value={userDetails.pin}
+                      onChange={(e) =>
+                        setUserDetails({
+                          ...userDetails,
+                          pin: e.target.value,
+                        })
+                      }
+                      className="bg-gray-700 border border-gray-600 px-4 py-3 w-full rounded-md outline-none text-white focus:ring-2 focus:ring-gray-500 peer"
+                      placeholder=" "
+                    />
+                    <label
+                      htmlFor="pin"
+                      className="absolute rounded-md text-sm text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] peer-focus:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-gray-300 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+                    >
+                      Pin/Zip Code
+                    </label>
+                  </div>
                 </div>
               </div>
             </section>
@@ -235,7 +454,7 @@ const TakeawayForm = () => {
             >
               <h2
                 id="summary-heading"
-                className="border-b border-gray-700 px-4 py-3 text-lg font-medium text-white"
+                className="border-b border-gray-700 px-4 py-3 my-3 text-lg font-medium text-white"
               >
                 Price Details
               </h2>
