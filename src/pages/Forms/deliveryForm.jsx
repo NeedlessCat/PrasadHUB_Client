@@ -62,7 +62,7 @@ const DeliveryForm = () => {
 
     try {
       const response = await fetch(
-        "hhttps://prasadhub-server.onrender.com/create-razorpay-order",
+        "https://prasadhub-server.onrender.com/create-razorpay-order",
         {
           method: "POST",
           headers: {
