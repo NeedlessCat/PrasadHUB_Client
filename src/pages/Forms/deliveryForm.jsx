@@ -62,7 +62,7 @@ const DeliveryForm = () => {
 
     try {
       const response = await fetch(
-        "https://prasad-hub-server.vercel.app/create-razorpay-order",
+        "hhttps://prasadhub-server.onrender.com/create-razorpay-order",
         {
           method: "POST",
           headers: {
@@ -102,7 +102,7 @@ const DeliveryForm = () => {
             //   throw new Error("Missing required Razorpay parameters");
             // }
             const verifyResponse = await fetch(
-              "https://prasad-hub-server.vercel.app/verify-payment",
+              "https://prasadhub-server.onrender.com/verify-payment",
               {
                 method: "POST",
                 headers: {
