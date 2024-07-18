@@ -11,7 +11,7 @@ import TakeawayForm from "./pages/Forms/takeawayForm";
 import DeliveryForm from "./pages/Forms/deliveryForm";
 import { ProtectedRouteForAdmin } from "./protectedRoute/protectAdmin";
 import AboutPage from "./pages/AboutPage/AboutPage";
-// import Signup from "./pages/Registration/signup";
+import Signup from "./pages/Registration/signup";
 
 const App = () => {
   return (
@@ -23,7 +23,7 @@ const App = () => {
           <Route path="/*" element={<NoPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/login" element={<Login />} />
-          {/* <Route path="/signup" element={<Signup />} /> */}
+          <Route path="/admin-signup" element={<Signup />} />
           <Route
             path="/admin-dashboard"
             element={

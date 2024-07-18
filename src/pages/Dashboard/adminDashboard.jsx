@@ -4,6 +4,7 @@ import OrderDelivery from "../../components/admin/orderDelivery";
 import OrderTakeaway from "../../components/admin/orderTakeaway";
 import { useContext } from "react";
 import myContext from "../../context/myContext";
+import { Link } from "react-router-dom";
 
 const AdminDashboard = () => {
   const user = JSON.parse(localStorage.getItem("users"));
@@ -44,6 +45,13 @@ const AdminDashboard = () => {
                 <span className=" font-bold">Role : </span>
                 {user?.role}
               </h1>
+              <div className=" grid place-items-center">
+                <Link to="/admin-signup">
+                  <button className="bg-pink-200 hover:bg-pink-400 text-white font-bold py-2 px-4 rounded">
+                    Add Admin
+                  </button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
