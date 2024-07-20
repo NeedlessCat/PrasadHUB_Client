@@ -64,7 +64,7 @@ const DeliveryForm = () => {
     try {
       // Create Razorpay order
       const response = await fetch(
-        "https://prasad-hub-client.vercel.app/create-razorpay-order",
+        "hhttps://prasadhub-server.onrender.com/create-razorpay-order",
         // "http://localhost:3001/create-razorpay-order",
         {
           method: "POST",
@@ -125,7 +125,7 @@ const DeliveryForm = () => {
 
       // Verify payment
       const verifyResponse = await fetch(
-        "https://prasad-hub-client.vercel.app/verify-payment",
+        "https://prasadhub-server.onrender.com/verify-payment",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
