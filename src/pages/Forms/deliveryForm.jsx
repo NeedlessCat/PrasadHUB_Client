@@ -134,6 +134,9 @@ const DeliveryForm = () => {
             razorpay_order_id: response.razorpay_order_id,
             razorpay_signature: response.razorpay_signature,
             email: userDetails.email,
+            name: userDetails.name,
+            mobile: userDetails.mobile,
+            role: userDetails.role,
           }),
         }
       );
