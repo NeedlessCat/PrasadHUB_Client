@@ -5,7 +5,7 @@ import hero2 from "../../assets/hero3.jpeg";
 const category = [
   {
     image: "https://cdn-icons-png.flaticon.com/256/4359/4359963.png",
-    name: "foreign",
+    name: "takeaway",
   },
   {
     image: "https://cdn-icons-png.flaticon.com/256/11833/11833323.png",
@@ -13,7 +13,7 @@ const category = [
   },
   {
     image: "https://cdn-icons-png.flaticon.com/256/8174/8174424.png",
-    name: "takeaway",
+    name: "update",
   },
 ];
 
@@ -33,7 +33,7 @@ const Category = () => {
         <h1 className="text-4xl md:text-6xl font-bold mb-8">
           Welcome to PrasadHUB
         </h1>
-        <p className="text-xl mb-12">Please choose a category:</p>
+        <p className="text-xl mb-12">Please choose the action to do:</p>
         {/* main 2  */}
         <div className="flex justify-center flex-wrap gap-8">
           {/* category  */}

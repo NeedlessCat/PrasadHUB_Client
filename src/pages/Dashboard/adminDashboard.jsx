@@ -1,15 +1,23 @@
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import OrderForeign from "../../components/admin/orderForeign";
+// import OrderForeign from "../../components/admin/orderForeign";
 import OrderDelivery from "../../components/admin/orderDelivery";
 import OrderTakeaway from "../../components/admin/orderTakeaway";
 import { useContext } from "react";
 import myContext from "../../context/myContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const AdminDashboard = () => {
+  const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("users"));
   const context = useContext(myContext);
-  const { getForeignOrder, getDeliveryOrder, getTakeawayOrder } = context;
+  // const { getForeignOrder, getDeliveryOrder, getTakeawayOrder } = context;
+  const { getDeliveryOrder, getTakeawayOrder } = context;
+
+  const logout = () => {
+    localStorage.clear("users");
+    navigate("/");
+  };
+
   return (
     <div>
       {/* Top */}
@@ -45,12 +53,18 @@ const AdminDashboard = () => {
                 <span className=" font-bold">Role : </span>
                 {user?.role}
               </h1>
-              <div className=" grid place-items-center">
+              <div className=" flex justify-center space-x-4">
                 <Link to="/admin-signup">
                   <button className="bg-pink-200 hover:bg-pink-400 text-white font-bold py-2 px-4 rounded">
                     Add Admin
                   </button>
                 </Link>
+                <button
+                  className="bg-pink-200 hover:bg-pink-400 text-white font-bold py-2 px-4 rounded"
+                  onClick={logout}
+                >
+                  Logout
+                </button>
               </div>
             </div>
           </div>
@@ -61,7 +75,7 @@ const AdminDashboard = () => {
           <Tabs>
             <TabList className="flex flex-wrap -m-4 text-center justify-center">
               {/* Total Products */}
-              <Tab className="p-4 md:w-1/3 sm:w-1/2 w-full cursor-pointer">
+              {/* <Tab className="p-4 md:w-1/3 sm:w-1/2 w-full cursor-pointer">
                 <div className=" border bg-pink-50 hover:bg-pink-100 border-pink-100 px-4 py-3 rounded-xl">
                   <div className="text-pink-500 w-12 h-12 mb-3 inline-block">
                     <svg
@@ -90,7 +104,7 @@ const AdminDashboard = () => {
                   </h2>
                   <p className=" text-pink-500  font-bold">Foreign Order</p>
                 </div>
-              </Tab>
+              </Tab> */}
 
               {/* Total Order  */}
               <Tab className="p-4 md:w-1/4 sm:w-1/2 w-full cursor-pointer">
@@ -153,9 +167,9 @@ const AdminDashboard = () => {
               </Tab>
             </TabList>
 
-            <TabPanel>
+            {/* <TabPanel>
               <OrderForeign />
-            </TabPanel>
+            </TabPanel> */}
 
             <TabPanel>
               <OrderDelivery />

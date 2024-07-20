@@ -5,9 +5,9 @@ import ScrollTop from "./components/ScrollTop/scrollTop";
 import Login from "./pages/Registration/login";
 import AdminDashboard from "./pages/Dashboard/adminDashboard";
 import MyState from "./context/myState";
-import ForeignForm from "./pages/Forms/foreignForm";
-import { Toaster } from "react-hot-toast";
 import TakeawayForm from "./pages/Forms/takeawayForm";
+import { Toaster } from "react-hot-toast";
+import UpdateForeignForm from "./pages/Forms/updateForm";
 import DeliveryForm from "./pages/Forms/deliveryForm";
 import { ProtectedRouteForAdmin } from "./protectedRoute/protectAdmin";
 import AboutPage from "./pages/AboutPage/AboutPage";
@@ -32,9 +32,9 @@ const App = () => {
               </ProtectedRouteForAdmin>
             }
           />
-          <Route path="/category/foreign" element={<ForeignForm />} />
-          <Route path="/category/delivery" element={<DeliveryForm />} />
           <Route path="/category/takeaway" element={<TakeawayForm />} />
+          <Route path="/category/delivery" element={<DeliveryForm />} />
+          <Route path="/category/update" element={<UpdateForeignForm />} />
         </Routes>
         <Toaster />
       </Router>
