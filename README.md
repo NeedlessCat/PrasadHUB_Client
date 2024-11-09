@@ -8,7 +8,7 @@ This application facilitates the collection of donations for social welfare init
 - Categorized donation options based on delivery services
 - Form filling and updating capabilities
 - Automated receipt generation and email delivery
-- Admin dashboard for managing donations and services
+- Admin dashboard for managing donations and services which enable to download the data as excel sheet to local storage as well.
 
 ## How It Works
 1. Users select a donation category based on available delivery services.
@@ -22,3 +22,6 @@ This application facilitates the collection of donations for social welfare init
 - Provides a tangible connection between donors and religious ceremonies
 - Offers a secure and transparent system for managing donations
 - Enables easy tracking and administration of donations and services
+
+## Pictorical Workflow
+- 
